@@ -144,31 +144,43 @@ time_fram = linspace(0, num_frames*frame_size*frame_over, length(spec_peaks));
 time_fogd = linspace(0, num_frames*frame_size*frame_over, length(fogd_spectrum));
 
 figure;
-subplot(4, 1, 1);
+subplot(5, 1, 1);
 plot(time_sign, data);
 title('Time plot of speech signal');
 
-subplot(4, 1, 2);
+subplot(5, 1, 2);
 plot(linspace(0, num_frames*frame_size*frame_over, length(spec_peaks)), spec_peaks);
 title('Sum of ten largest peaks in the DFT spectrum');
 
-subplot(4, 1, 3);
+subplot(5, 1, 3);
 plot(linspace(0, num_frames*frame_size*frame_over, length(enhanced_spec_peaks)), real(enhanced_spec_peaks));
 title('Enhanced sum of ten largest peaks in the DFT spectrum');
 
-subplot(4, 1, 4);
+subplot(5, 1, 4);
 x = time_fogd; 
 y = normalize(real(fogd_spectrum));
+y = y - min(y);
+y = y/max(y);
 
 % Vowel Onset Points
-pos_peaks = islocalmax(y);
+[pos_peaks, pos_peaks_idx] = findpeaks(y);
+% pos_peaks = islocalmax(y);
 
 % Vowel Offset Points
-neg_peaks = islocalmin(y);
+% neg_peaks = islocalmin(y);
 
 plot(x, y);
 hold on
-plot(x(pos_peaks), y(pos_peaks), '^r', 'Color', [1 0 0], 'MarkerSize', 2);
-plot(x(neg_peaks), y(neg_peaks), 'vr', 'Color', [0 0 1], 'MarkerSize', 2);
+stem(x(pos_peaks_idx), pos_peaks, '*');
+% plot(pos_peaks, y(pos_peaks_idx), '^r', 'Color', [1 0 0], 'MarkerSize', 5);
+% plot(x(neg_peaks), y(neg_peaks), 'vr', 'Color', [0 0 1], 'MarkerSize', 2);
 hold off
-title('VOP evidence plot');
+title('VOP Evidence Plot');
+
+subplot(5, 1, 5);
+plot(time_sign, data);
+title('Time plot of speech signal');
+hold on
+stem(x(pos_peaks_idx), pos_peaks/15, '*');
+hold off
+title('Vowel Onset Points');
