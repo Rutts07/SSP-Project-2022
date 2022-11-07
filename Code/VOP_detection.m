@@ -130,13 +130,36 @@ enhanced_spec_peaks = smooth(enhanced_spec_peaks);
 %}
 
 % Enhance the spectral peaks with smoothed hilbert transform and then FOD
-enhanced_spec_peaks = diff(smooth(hilbert(spec_peaks)));
+enhanced_spec_peaks = smooth(diff(smooth(hilbert(spec_peaks))));
 
 % Enhanced spectrum sent to FOGD
 fogd_size = 0.1*fs;                     % 100ms windows
 wind_size = fogd_size / frame_samp;     % num_frames to convolve
 gaussFilter = gausswin(wind_size);
 fogd_spectrum = conv(gaussFilter, enhanced_spec_peaks);
+fogd_spectrum = smooth(fogd_spectrum);
+
+% Apply smoothing several times x10
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
+fogd_spectrum = smooth(fogd_spectrum);
 
 % Create a time axis
 time_sign = linspace(0, length(data)/fs, length(data));
@@ -163,8 +186,14 @@ y = y - min(y);
 y = y/max(y);
 
 % Vowel Onset Points
-[pos_peaks, pos_peaks_idx] = findpeaks(y);
 % pos_peaks = islocalmax(y);
+[pos_peaks, pos_peaks_idx] = findpeaks(y);
+
+%{
+% Eliminate Spurious Peaks
+pos_peaks = pos_peaks(3:end-2);
+pos_peaks_idx = pos_peaks_idx(3:end-2);
+%}
 
 % Vowel Offset Points
 % neg_peaks = islocalmin(y);
