@@ -44,7 +44,6 @@ end
 
 spec_peaks = smooth(spec_peaks);
 
-%{
 % Normalize the FOD spectral peaks
 norm_peaks = spec_peaks;
 enhanced_spec_peaks = zeros(num_frames, 1);
@@ -127,10 +126,11 @@ while norm_samps < num_frames
     end
 end
 enhanced_spec_peaks = smooth(enhanced_spec_peaks);
-%}
 
+%{
 % Enhance the spectral peaks with smoothed hilbert transform and then FOD
-enhanced_spec_peaks = smooth(diff(smooth(hilbert(spec_peaks))));
+enhanced_spec_peaks = smooth(diff(smooth(hilbert(enhanced_spec_peaks))));
+%}
 
 % Enhanced spectrum sent to FOGD
 fogd_size = 0.1*fs;                     % 100ms windows
@@ -139,7 +139,7 @@ gaussFilter = gausswin(wind_size);
 fogd_spectrum = conv(gaussFilter, enhanced_spec_peaks);
 fogd_spectrum = smooth(fogd_spectrum);
 
-% Apply smoothing several times x10
+% Apply smoothing several times x20
 fogd_spectrum = smooth(fogd_spectrum);
 fogd_spectrum = smooth(fogd_spectrum);
 fogd_spectrum = smooth(fogd_spectrum);
