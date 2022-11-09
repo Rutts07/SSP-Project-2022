@@ -147,7 +147,7 @@ for i=3:length(train_dir)
             if upper >= num_frames
                 break;
             end
-            
+
             end
         end
 
@@ -210,8 +210,6 @@ for i=3:length(train_dir)
                 l = l + 1;
             end
 
-            % Convert to mono channel
-            vowel_region = vowel_region(:,1);
             audiowrite(new_file, vowel_region, fs);
 
         else
